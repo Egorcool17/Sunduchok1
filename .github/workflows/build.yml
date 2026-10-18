@@ -1,26 +1,20 @@
 name: Build APK
-
-on:
-  push:
-    branches: [ "main" ]
-  workflow_dispatch:
+on: [push, workflow_dispatch]
 
 jobs:
   build-android:
-    # Явно указываем стабильную версию Ubuntu для совместимости
-    runs-on: ubuntu-22.04 
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
+        uses: digreatbrian/buildozer-action@v1
         with:
-          command: buildozer android debug
-
-      - name: Upload Artifact
+          buildozer-cmd: buildozer -v android debug
+          
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Sunduchok-APK
+          name: package
           path: bin/*.apk
